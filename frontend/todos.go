@@ -60,7 +60,7 @@ func (c *ToDoList) Render() app.UI {
 			app.Div().Styles(map[string]string{"display": "grid", "grid-template-columns": "auto auto"}).Body(
 				app.Div().Body(
 					app.Button().Text("✓"),
-				).OnClick(c.handleToggleDone),
+				).OnClick(c.toggleAllDone),
 				app.Div().Body(
 					app.Input().Class("new-todo").Type("text").
 						Value(c.inputTodo).
@@ -117,7 +117,7 @@ func (c *ToDoList) Render() app.UI {
 							if c.hasCompletedTodo() {
 								return app.Div().Styles(map[string]string{
 									"text-align": "right",
-								}).Body(app.Button().Text("Clear completed")).OnClick(c.handleClearCompleted)
+								}).Body(app.Button().Text("Clear completed")).OnClick(c.clearCompleted)
 							}
 							return app.Div()
 						}(),
@@ -180,7 +180,7 @@ func (c *ToDoList) hasUncompletedTodo() bool {
 	return false
 }
 
-func (c *ToDoList) handleClearCompleted(ctx app.Context, e app.Event) {
+func (c *ToDoList) clearCompleted(_ app.Context, _ app.Event) {
 	var tmp []*todo
 
 	for _, v := range c.todos {
@@ -197,7 +197,7 @@ func (c *ToDoList) switchSelection(mode int) func(ctx app.Context, e app.Event) 
 	}
 }
 
-func (c *ToDoList) handleToggleDone(ctx app.Context, e app.Event) {
+func (c *ToDoList) toggleAllDone(ctx app.Context, e app.Event) {
 	e.PreventDefault()
 	newDone := false
 	if c.hasUncompletedTodo() {
