@@ -37,3 +37,4 @@ fabric.properties
 
 /web/app.wasm
 /bin/
+!/bin/.placeholder
