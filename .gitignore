@@ -35,4 +35,5 @@ fabric.properties
 !.idea/codeStyles
 !.idea/runConfigurations
 
-/web/
+/web/app.wasm
+/bin/
