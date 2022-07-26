@@ -53,9 +53,16 @@ func (c *ToDoList) Render() app.UI {
 		}(),
 		app.H1().Text("todos"),
 		app.Form().Body(
-			app.Input().Class("new-todo").Type("text").
-				Value(c.inputTodo).
-				OnInput(c.ValueTo(&c.inputTodo)),
+			app.Div().Styles(map[string]string{"display": "grid", "grid-template-columns": "auto auto"}).Body(
+				app.Div().Body(
+					app.Button().Text("✓"),
+				).OnClick(c.handleToggleDone),
+				app.Div().Body(
+					app.Input().Class("new-todo").Type("text").
+						Value(c.inputTodo).
+						OnInput(c.ValueTo(&c.inputTodo)),
+				),
+			),
 		).OnSubmit(c.onSubmit),
 		app.Div().Body(
 			app.Ul().Body(
@@ -103,7 +110,7 @@ func (c *ToDoList) Render() app.UI {
 							}(),
 						),
 						func() app.UI {
-							if c.hasCompletedToDo() {
+							if c.hasCompletedTodo() {
 								return app.Div().Styles(map[string]string{
 									"text-align": "right",
 								}).Body(app.Button().Text("Clear completed")).OnClick(c.handleClearCompleted)
@@ -151,9 +158,18 @@ func (c *ToDoList) generateLeftItemsOutput() string {
 	return fmt.Sprintf("%v items left", sum)
 }
 
-func (c *ToDoList) hasCompletedToDo() bool {
+func (c *ToDoList) hasCompletedTodo() bool {
 	for _, v := range c.todos {
 		if v.Done {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *ToDoList) hasUncompletedTodo() bool {
+	for _, v := range c.todos {
+		if !v.Done {
 			return true
 		}
 	}
@@ -175,4 +191,17 @@ func (c *ToDoList) switchSelection(mode int) func(ctx app.Context, e app.Event) 
 	return func(ctx app.Context, e app.Event) {
 		c.filterMode = mode
 	}
+}
+
+func (c *ToDoList) handleToggleDone(ctx app.Context, e app.Event) {
+	e.PreventDefault()
+	newDone := false
+	if c.hasUncompletedTodo() {
+		newDone = true
+	}
+
+	for _, v := range c.todos {
+		v.Done = newDone
+	}
+
 }
