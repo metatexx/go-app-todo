@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 	"github.com/metatexx/go-app-todo/frontend"
 	"log"
@@ -34,11 +35,12 @@ func main() {
 	// required resources to make it work into a web browser. Here it is
 	// configured to handle requests with a path that starts with "/".
 	http.Handle("/", &app.Handler{
-		Name:        "ToDo List",
-		Description: "An example ToDo App",
+		Name:        "todo List",
+		Description: "An example todo App",
+		Styles:      []string{"/web/styles.css"},
 	})
-
-	if err := http.ListenAndServe(":8000", nil); err != nil {
+	fmt.Println("Listening on http://127.0.0.1:8001")
+	if err := http.ListenAndServe("127.0.0.1:8001", nil); err != nil {
 		log.Fatal(err)
 	}
 }
