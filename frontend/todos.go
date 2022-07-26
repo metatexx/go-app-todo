@@ -83,9 +83,24 @@ func (c *ToDoList) Render() app.UI {
 					app.Div().Class("grid").Body(
 						app.Div().Text(c.generateLeftItemsOutput()),
 						app.Div().Class("selection").Body(
-							app.Button().Class("active").Text("All").OnClick(c.switchSelection(0)),
-							app.Button().Text("Active").OnClick(c.switchSelection(1)),
-							app.Button().Text("Completed").OnClick(c.switchSelection(2)),
+							func() app.UI {
+								if c.filterMode == 0 {
+									return app.Button().Text("All").OnClick(c.switchSelection(0)).Class("active")
+								}
+								return app.Button().Text("All").OnClick(c.switchSelection(0))
+							}(),
+							func() app.UI {
+								if c.filterMode == 1 {
+									return app.Button().Text("Active").OnClick(c.switchSelection(1)).Class("active")
+								}
+								return app.Button().Text("Active").OnClick(c.switchSelection(1))
+							}(),
+							func() app.UI {
+								if c.filterMode == 2 {
+									return app.Button().Text("Completed").OnClick(c.switchSelection(2)).Class("active")
+								}
+								return app.Button().Text("Completed").OnClick(c.switchSelection(2))
+							}(),
 						),
 						func() app.UI {
 							if c.hasCompletedToDo() {
