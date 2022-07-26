@@ -20,22 +20,11 @@ type todo struct {
 
 func (c *ToDoList) OnInit() {
 	c.todos = []*todo{
-		{
-			Text: "todo Item Number 1",
-		},
-		{
-			Text: "Clean the kitchen",
-		},
-		{
-			Text: "Create PR",
-		},
-		{
-			Text: "Relax!!!",
-		},
-		{
-			Done: true,
-			Text: "Done Item",
-		},
+		{Text: "todo Item Number 1"},
+		{Text: "Clean the kitchen"},
+		{Text: "Create PR"},
+		{Text: "Relax!!!"},
+		{Text: "Done Item", Done: true},
 	}
 }
 
@@ -55,71 +44,106 @@ func (c *ToDoList) Render() app.UI {
 			}
 			return app.Div()
 		}(),
-		app.H1().Text("todos"),
-		app.Form().Body(
-			app.Div().Styles(map[string]string{"display": "grid", "grid-template-columns": "auto auto"}).Body(
+		app.H1().
+			Text("todos"),
+		app.Div().
+			Styles(map[string]string{"display": "grid", "grid-template-columns": "auto auto"}).
+			Body(
 				app.Div().Body(
-					app.Button().Text("✓"),
-				).OnClick(c.toggleAllDone),
-				app.Div().Body(
-					app.Input().Class("new-todo").Type("text").
-						Value(c.inputTodo).
-						OnInput(c.ValueTo(&c.inputTodo)),
+					app.Button().
+						Text("✓").
+						OnClick(c.toggleAllDone),
+				),
+				app.Form().
+					OnSubmit(c.onSubmit).Body(
+					app.Div().Body(
+						app.Input().
+							Type("text").
+							Value(c.inputTodo).
+							Class("new-todo").
+							OnInput(c.ValueTo(&c.inputTodo)),
+					),
 				),
 			),
-		).OnSubmit(c.onSubmit),
 		app.Div().Body(
 			app.Ul().Body(
 				app.Range(c.todos).Slice(func(i int) app.UI {
 					if (c.filterMode == 1 && c.todos[i].Done) || (c.filterMode == 2 && !c.todos[i].Done) {
 						return app.Span()
 					}
-					return app.Li().Styles(map[string]string{
-						"text-decoration": func() string {
-							if c.todos[i].Done {
-								return "line-through"
-							}
-							return "none"
-						}(),
-					}).Body(
+					return app.Li().
+						Styles(map[string]string{
+							"text-decoration": func() string {
+								if c.todos[i].Done {
+									return "line-through"
+								}
+								return "none"
+							}(),
+						}).Body(
 						app.Label().Body(
-							app.Input().Type("checkbox").
+							app.Input().
+								Type("checkbox").
 								Checked(c.todos[i].Done).
 								OnChange(c.toggleDone(c.todos[i]), c.todos[i]),
 							app.Text(c.todos[i].Text),
 						),
-						app.Div().Class("destroy").Text("✕").OnClick(c.deleteHandler(c.todos[i]), c.todos[i]))
+						app.Div().
+							Class("destroy").
+							Text("✕").
+							OnClick(c.deleteHandler(c.todos[i]), c.todos[i]))
 				}),
 				app.Li().Body(
-					app.Div().Class("grid").Body(
-						app.Div().Text(c.generateLeftItemsOutput()),
-						app.Div().Class("selection").Body(
+					app.Div().
+						Class("grid").Body(
+						app.Div().
+							Text(c.generateLeftItemsOutput()),
+						app.Div().
+							Class("selection").Body(
 							func() app.UI {
 								if c.filterMode == 0 {
-									return app.Button().Text("All").OnClick(c.switchSelection(0)).Class("active")
+									return app.Button().
+										Text("All").
+										OnClick(c.switchSelection(0)).
+										Class("active")
 								}
-								return app.Button().Text("All").OnClick(c.switchSelection(0))
+								return app.Button().
+									Text("All").
+									OnClick(c.switchSelection(0))
 							}(),
 							func() app.UI {
 								if c.filterMode == 1 {
-									return app.Button().Text("Active").OnClick(c.switchSelection(1)).Class("active")
+									return app.Button().
+										Text("Active").
+										OnClick(c.switchSelection(1)).
+										Class("active")
 								}
-								return app.Button().Text("Active").OnClick(c.switchSelection(1))
+								return app.Button().
+									Text("Active").
+									OnClick(c.switchSelection(1))
 							}(),
 							func() app.UI {
 								if c.filterMode == 2 {
-									return app.Button().Text("Completed").OnClick(c.switchSelection(2)).Class("active")
+									return app.Button().
+										Text("Completed").
+										OnClick(c.switchSelection(2)).
+										Class("active")
 								}
-								return app.Button().Text("Completed").OnClick(c.switchSelection(2))
+								return app.Button().
+									Text("Completed").
+									OnClick(c.switchSelection(2))
 							}(),
 						),
 						func() app.UI {
-							if c.hasCompletedTodo() {
-								return app.Div().Styles(map[string]string{
-									"text-align": "right",
-								}).Body(app.Button().Text("Clear completed")).OnClick(c.clearCompleted)
+							if !c.hasCompletedTodo() {
+								return app.Span()
 							}
-							return app.Div()
+							return app.Div().
+								Styles(map[string]string{
+									"text-align": "right",
+								}).Body(
+								app.Button().
+									Text("Clear completed").
+									OnClick(c.clearCompleted))
 						}(),
 					),
 				),

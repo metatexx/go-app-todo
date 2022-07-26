@@ -14,7 +14,7 @@ li {
     clear: both;
     list-style-type: none;
     padding: 5px 5px;
-    border-style:solid;
+    border-style: solid;
     border-color: grey;
     border-width: 1px 1px 0 1px;
 }
@@ -23,9 +23,9 @@ li:last-child {
     border-width: 1px 1px 1px 1px;
 }
 
-.todoapp{
-width: 550px;
-margin: 0 auto;
+.todoapp {
+    width: 550px;
+    margin: 0 auto;
 }
 
 label > input {
