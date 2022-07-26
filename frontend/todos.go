@@ -44,6 +44,10 @@ func (c *ToDoList) OnAppUpdate(ctx app.Context) {
 }
 
 func (c *ToDoList) Render() app.UI {
+	if app.IsServer {
+		// this gets called on the server before the page is delivered
+		return app.Div().Text("app is loading")
+	}
 	return app.Section().Class("todoapp").Body(
 		func() app.UI {
 			if c.updateAvailable {
@@ -81,10 +85,10 @@ func (c *ToDoList) Render() app.UI {
 						app.Label().Body(
 							app.Input().Type("checkbox").
 								Checked(c.todos[i].Done).
-								OnChange(c.toggleDone(c.todos[i])),
+								OnChange(c.toggleDone(c.todos[i]), c.todos[i]),
 							app.Text(c.todos[i].Text),
 						),
-						app.Div().Class("destroy").Text("✕").OnClick(c.deleteHandler(c.todos[i])))
+						app.Div().Class("destroy").Text("✕").OnClick(c.deleteHandler(c.todos[i]), c.todos[i]))
 				}),
 				app.Li().Body(
 					app.Div().Class("grid").Body(
