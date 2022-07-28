@@ -28,6 +28,11 @@ li:last-child {
     margin: 0 auto;
 }
 
+label {
+    display: inline-block;
+    width: 500px;
+}
+
 label > input {
     margin-right: 15px;
 }
@@ -37,10 +42,11 @@ label > input {
     float: right;
 }
 
-.destroy {
+.delete {
     float: right;
     color: red;
     cursor: pointer;
+    padding: 2px 5px;
 }
 
 .grid {
@@ -56,6 +62,7 @@ label > input {
     border: none;
     background-color: transparent;
     margin: 0 5px;
+    padding: 2px 10px;
 }
 
 .selection button.active {
