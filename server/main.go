@@ -38,6 +38,12 @@ func main() {
 		Name:        "todo List",
 		Description: "An example todo App",
 		Styles:      []string{"/web/styles.css"},
+		Image:       "/web/icon-512.png",
+		Icon: app.Icon{
+			Default:    "/web/icon-192.png",
+			Large:      "/web/icon-512.png",
+			AppleTouch: "/web/icon-192.png",
+		},
 	})
 	fmt.Println("Listening on http://127.0.0.1:8001")
 	if err := http.ListenAndServe("127.0.0.1:8001", nil); err != nil {
